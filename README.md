@@ -23,3 +23,11 @@ An automated tool that uses Natural Language Processing (NLP) to parse meeting t
 ├── requirements.txt              # Dependencies
 ├── meeting_report.txt            # Output: Text report
 └── meeting_analysis.png          # Output: Visual dashboard
+
+⚡ Clone Repository
+To use this project, first clone the repository to your local machine:
+git clone [https://github.com/T786-eng/AI-Meeting-Notes-Generator.git](https://github.com/T786-eng/AI-Meeting-Notes-Generator.git)
+cd AI-Meeting-Notes-Generator  
+
+📄 License
+MIT License
