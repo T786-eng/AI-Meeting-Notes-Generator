@@ -1,0 +1,104 @@
+============================================================
+           MEETING NOTES & ACTION ITEMS REPORT
+============================================================
+
+Generated: 2026-01-29 23:06:07
+
+
+📋 PARTICIPANTS
+------------------------------------------------------------
+1. Everyone
+2. John
+3. Lisa
+4. Mike
+5. Sarah
+
+
+📝 MEETING SUMMARY
+------------------------------------------------------------
+The results show a 15% increase in customer engagement. I will work on the mobile app updates by end of February. We need to prioritize the user interface improvements urgently. Mike, you must also complete the API integration 
+    before the mobile launch. Let's schedule a follow-up meeting for next Monday to review progress.
+
+
+✅ ACTION ITEMS
+------------------------------------------------------------
+
+1. We need to discuss the Q1 deliverables
+   • Assignee: Unassigned
+   • Priority: Medium
+   • Deadline: No deadline
+
+2. I've completed the market analysis
+   • Assignee: Unassigned
+   • Priority: Medium
+   • Deadline: No deadline
+
+3. We should focus on mobile optimization next quarter
+   • Assignee: Unassigned
+   • Priority: Medium
+   • Deadline: No deadline
+
+4. I will work on the mobile app updates by end of February
+   • Assignee: Unassigned
+   • Priority: Medium
+   • Deadline: end of february
+
+5. We need to prioritize the user interface improvements urgently
+   • Assignee: Unassigned
+   • Priority: High
+   • Deadline: No deadline
+
+6. I will have the comprehensive report ready
+   • Assignee: Unassigned
+   • Priority: Medium
+   • Deadline: No deadline
+
+7. Should I include the competitor analysis too
+   • Assignee: Unassigned
+   • Priority: Medium
+   • Deadline: No deadline
+
+8. Mike, you must also complete the API integration 
+    before the mobile launch
+   • Assignee: Mike
+   • Priority: Medium
+   • Deadline: No deadline
+
+9. I'll follow up with the backend team this week
+   • Assignee: Unassigned
+   • Priority: Medium
+   • Deadline: No deadline
+
+10. We need to ensure all security protocols 
+    are in place
+   • Assignee: Unassigned
+   • Priority: Medium
+   • Deadline: No deadline
+
+11. I will create test cases and have them ready by Wednesday
+   • Assignee: Unassigned
+   • Priority: Medium
+   • Deadline: No deadline
+
+12. Action items are clear
+   • Assignee: Unassigned
+   • Priority: Medium
+   • Deadline: No deadline
+
+
+🔑 KEY TOPICS DISCUSSED
+------------------------------------------------------------
+• John: mentioned 6 times
+• Meeting: mentioned 4 times
+• Need: mentioned 4 times
+• Sarah: mentioned 4 times
+• Mike: mentioned 4 times
+• Mobile: mentioned 3 times
+• Next: mentioned 3 times
+• Everyone: mentioned 2 times
+• Project: mentioned 2 times
+• Analysis: mentioned 2 times
+
+============================================================
+                    END OF REPORT
+============================================================
