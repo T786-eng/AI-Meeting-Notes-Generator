@@ -1,43 +1,160 @@
-import pytesseract
-from PIL import Image
-from pdf2image import convert_from_path
-import PyPDF2
+import streamlit as st
+import pandas as pd
+import pdfplumber
 from docx import Document
+from meeting_notes_generator import MeetingNotesGenerator
 
-# If you are on Windows, uncomment the line below and point to your tesseract.exe
-# pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+# --- PAGE CONFIG ---
+st.set_page_config(page_title="Pro-Meet AI", page_icon="📝", layout="wide")
 
-def extract_text_from_file(uploaded_file):
-    file_type = uploaded_file.name.split('.')[-1].lower()
+# --- PROFESSIONAL UI STYLING ---
+# We use custom CSS to create clean, white cards with soft shadows
+st.markdown("""
+    <style>
+    /* Main app background */
+    .stApp {
+        background-color: #f8f9fa;
+    }
     
-    # 1. Handle standard Text
-    if file_type == 'txt':
-        return uploaded_file.getvalue().decode("utf-8")
+    /* Clean Metric Card Design */
+    [data-testid="stMetric"] {
+        background-color: #ffffff;
+        border: 1px solid #e0e0e0;
+        padding: 1.5rem;
+        border-radius: 15px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+    }
     
-    # 2. Handle Images (New!)
-    elif file_type in ['jpg', 'jpeg', 'png']:
-        image = Image.open(uploaded_file)
-        return pytesseract.image_to_string(image)
+    /* Hover effect for recruiters to notice interactivity */
+    [data-testid="stMetric"]:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        border-color: #4CAF50;
+    }
+
+    /* Metric Label (Participants, Action Items, etc.) */
+    [data-testid="stMetricLabel"] {
+        color: #5f6368 !important;
+        font-weight: 600 !important;
+        font-size: 1rem !important;
+        letter-spacing: 0.5px;
+    }
     
-    # 3. Handle PDF (with OCR fallback)
-    elif file_type == 'pdf':
-        # First try standard extraction
-        pdf_reader = PyPDF2.PdfReader(uploaded_file)
+    /* Metric Value (The numbers) */
+    [data-testid="stMetricValue"] {
+        color: #1a73e8 !important;
+        font-weight: 800 !important;
+    }
+
+    /* Header styling */
+    h1 {
+        color: #202124;
+        font-weight: 700;
+    }
+    
+    /* Sidebar custom styling */
+    section[data-testid="stSidebar"] {
+        background-color: #ffffff;
+        border-right: 1px solid #e0e0e0;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+def extract_text(file):
+    """Pure Python text extraction without external software dependencies."""
+    fname = file.name.lower()
+    if fname.endswith('.txt'):
+        return file.getvalue().decode("utf-8")
+    
+    elif fname.endswith('.docx'):
+        doc = Document(file)
+        return "\n".join([p.text for p in doc.paragraphs])
+    
+    elif fname.endswith('.pdf'):
         text = ""
-        for page in pdf_reader.pages:
-            text += page.extract_text() or ""
-            
-        # If extraction failed (likely a scanned PDF), use OCR
-        if len(text.strip()) < 10:
-            # Note: This requires 'poppler' installed on your system
-            images = convert_from_path(uploaded_file)
-            for img in images:
-                text += pytesseract.image_to_string(img)
+        # Use pdfplumber for better text layout extraction
+        with pdfplumber.open(file) as pdf:
+            for page in pdf.pages:
+                page_text = page.extract_text()
+                if page_text:
+                    text += page_text + "\n"
         return text
+    return ""
 
-    # 4. Handle Word Docs
-    elif file_type == 'docx':
-        doc = Document(uploaded_file)
-        return "\n".join([para.text for para in doc.paragraphs])
+# --- MAIN UI ---
+st.title("🎙️ AI Meeting Intelligence")
+st.markdown("##### Professional Meeting Analytics & Action Item Extraction")
+
+with st.sidebar:
+    st.header("📤 Upload")
+    uploaded_file = st.file_uploader("Drop your transcript (TXT, PDF, or DOCX)", type=['txt', 'pdf', 'docx'])
+    st.divider()
+    st.subheader("⚙️ Analysis Settings")
+    summary_len = st.slider("Summary Length (Sentences)", 3, 15, 5)
     
-    return None
+    # Adding a small bio/credit for recruiters
+    st.sidebar.markdown("---")
+    st.sidebar.caption("🚀 Developed for the **UIDAI Hackathon 2026**")
+    st.sidebar.info("This tool uses TF-IDF and NLP for automated summarization and task tracking.")
+
+if uploaded_file:
+    try:
+        with st.spinner("Processing your meeting transcript..."):
+            raw_text = extract_text(uploaded_file)
+            
+            if not raw_text.strip():
+                st.warning("⚠️ No text could be extracted. Please ensure your PDF is text-based and not a scanned image.")
+                st.stop()
+
+            # Initialize your core NLP class
+            generator = MeetingNotesGenerator()
+            generator.load_transcript(text=raw_text)
+            generator.extract_participants()
+            actions = generator.extract_action_items()
+
+            # --- KEY METRICS DASHBOARD ---
+            st.write("### 📊 Meeting Overview")
+            m1, m2, m3 = st.columns(3)
+            m1.metric("Participants Detected", len(generator.participants))
+            m2.metric("Critical Action Items", len(actions))
+            m3.metric("Transcript Words", f"{len(raw_text.split()):,}")
+
+            # --- DETAILED ANALYSIS TABS ---
+            tab1, tab2, tab3 = st.tabs(["📉 Visual Analytics", "📝 Executive Summary", "✅ Task List"])
+
+            with tab1:
+                st.write("#### Sentiment & Keyword Analysis")
+                st.pyplot(generator.create_visualizations())
+
+            with tab2:
+                st.write("#### Generated Summary")
+                st.info(generator.generate_summary(num_sentences=summary_len))
+                
+                with st.expander("Show Full Raw Text"):
+                    st.text_area("", raw_text, height=300)
+
+            with tab3:
+                st.write("#### Action Item Tracker")
+                if actions:
+                    df_actions = pd.DataFrame(actions)
+                    # Use st.dataframe for an interactive, sortable table
+                    st.dataframe(df_actions, use_container_width=True, hide_index=True)
+                else:
+                    st.success("🎉 No pending action items were detected in this session!")
+
+            # --- EXPORT SECTION ---
+            st.divider()
+            st.download_button(
+                label="📥 Download Full Meeting Report",
+                data=f"MEETING SUMMARY:\n{generator.generate_summary()}\n\nACTION ITEMS:\n{str(actions)}",
+                file_name=f"Report_{uploaded_file.name}.txt",
+                mime="text/plain"
+            )
+
+    except Exception as e:
+        st.error(f"Analysis Error: {e}")
+        st.info("Check if your transcript format is standard or contains unusual characters.")
+else:
+    # Display a professional welcome message if no file is uploaded
+    st.info("👋 **Welcome!** Please upload a transcript in the sidebar to begin generating insights.")
