@@ -27,6 +27,12 @@ An automated intelligence tool that leverages **Natural Language Processing (NLP
 └── README.md                     # Project Documentation
 ```
 
+# 🎙️ Pro-Meet AI: Meeting Intelligence & Action Tracker
+
+**🔗 Live Demo:** [View App Online](https://ai-meeting-notes-generator-nxaihvv42ofjtcxq6cz68k.streamlit.app/)
+
+---
+
 ## ⚡ Quick Start
 
 1. Clone the Repository
