@@ -1,33 +1,48 @@
-# AI Meeting Notes & Action Items Generator
+# 🎙️ Pro-Meet AI: Meeting Intelligence & Action Tracker
 
-An automated tool that uses Natural Language Processing (NLP) to parse meeting transcripts. It generates concise summaries, extracts actionable tasks with priorities, and creates visual analytics of the meeting dynamics.
+An automated intelligence tool that leverages **Natural Language Processing (NLP)** to transform meeting transcripts into structured, actionable insights. This application provides a seamless way to track project progress, assign tasks, and visualize meeting dynamics through a modern web interface.
 
-## 🚀 Features
+## 🚀 Key Features
 
-* **Automated Summarization**: Extracts key insights using TF-IDF algorithms.
-* **Action Item Detection**: Identifies tasks, assignees, deadlines, and priority levels (High/Medium/Low).
-* **Visual Analytics**: Generates charts for keyword frequency, action item distribution, and participant activity.
-* **Report Generation**: Exports a formatted text file (`meeting_report.txt`) ready for distribution.
+* **Multi-Format Support**: Seamlessly parse `.txt`, `.pdf`, and `.docx` transcripts using pure Python libraries.
+* **Automated Summarization**: Generates concise executive summaries using **TF-IDF (Term Frequency-Inverse Document Frequency)** algorithms.
+* **Intelligent Action Item Detection**: Automatically identifies tasks, assignees, and deadlines within the conversation.
+* **Interactive Dashboard**: A modern **Streamlit** web interface featuring visual analytics for participant activity and keyword frequency.
+* **Instant Reporting**: Export processed meeting notes and action plans as professional text reports.
 
 ## 🛠️ Tech Stack
 
 * **Python 3.x**
-* **Pandas & NumPy**: Data manipulation and processing.
-* **Scikit-learn**: Text feature extraction (TF-IDF).
-* **Matplotlib & Seaborn**: Data visualization.
+* **Streamlit**: Web interface and dashboard deployment.
+* **NLP & Analytics**: Scikit-learn (TF-IDF), Pandas, NumPy.
+* **Visualization**: Matplotlib, Seaborn.
+* **File Parsing**: pdfplumber (PDF), python-docx (Word).
 
 ## 📂 Project Structure
 
 ```text
-├── meeting_notes_generator.py    # Main script
-├── requirements.txt              # Dependencies
-├── meeting_report.txt            # Output: Text report
-└── meeting_analysis.png          # Output: Visual dashboard
+├── app.py                        # Streamlit Web Application (Frontend)
+├── meeting_notes_generator.py    # Core NLP Logic (Backend)
+├── requirements.txt              # Project Dependencies
+└── README.md                     # Project Documentation
+```
 
-⚡ Clone Repository
-To use this project, first clone the repository to your local machine:
+## ⚡ Quick Start
+
+1. Clone the Repository
+```bash
 git clone [https://github.com/T786-eng/AI-Meeting-Notes-Generator.git](https://github.com/T786-eng/AI-Meeting-Notes-Generator.git)
-cd AI-Meeting-Notes-Generator  
+cd AI-Meeting-Notes-Generator
+```
+2. Install Dependencies
+```bash
+pip install -r requirements.txt
+```
+
+3. Run the Application
+```bash
+streamlit run app.py
+```
 
 📄 License
-MIT License
+Distributed under the MIT License.
