@@ -1,6 +1,7 @@
 import streamlit as st
 from meeting_notes_generator import MeetingNotesGenerator
 import io
+import pandas as pd
 
 # Page Config
 st.set_page_config(page_title="AI Meeting Assistant", page_icon="🎙️")
