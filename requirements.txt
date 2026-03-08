@@ -1,5 +1,13 @@
+# Core Data Science (Your original versions)
 numpy==1.24.3
 pandas==2.0.3
 scikit-learn==1.3.0
 matplotlib==3.7.2
 seaborn==0.12.2
+
+# Web Framework
+streamlit
+
+# File Extraction (Pure Python - no external software needed)
+pdfplumber
+python-docx
