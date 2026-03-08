@@ -1,59 +1,43 @@
-import streamlit as st
-from meeting_notes_generator import MeetingNotesGenerator
-import io
-import pandas as pd
+import pytesseract
+from PIL import Image
+from pdf2image import convert_from_path
+import PyPDF2
+from docx import Document
 
-# Page Config
-st.set_page_config(page_title="AI Meeting Assistant", page_icon="🎙️")
+# If you are on Windows, uncomment the line below and point to your tesseract.exe
+# pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
-st.title("🎙️ AI Meeting Notes & Action Items")
-st.markdown("Upload your meeting transcript to automatically generate summaries and visualize tasks.")
-
-# Sidebar for inputs
-st.sidebar.header("Settings")
-num_summary = st.sidebar.slider("Summary Length (Sentences)", 3, 10, 5)
-
-# File Upload
-uploaded_file = st.file_uploader("Choose a transcript file (.txt)", type="txt")
-
-if uploaded_file:
-    # 1. Process Data
-    text = uploaded_file.getvalue().decode("utf-8")
-    generator = MeetingNotesGenerator()
-    generator.load_transcript(text=text)
-    generator.extract_participants()
-    generator.extract_action_items()
-
-    # 2. Display Analytics
-    st.header("📊 Meeting Insights")
-    fig = generator.create_visualizations()
-    st.pyplot(fig)
-
-    # 3. Display Summary
-    st.header("📝 Executive Summary")
-    summary = generator.generate_summary(num_sentences=num_summary)
-    st.write(summary)
-
-    # 4. Action Items Table
-    st.header("✅ Action Items")
-    if generator.action_items:
-        df_actions = pd.DataFrame(generator.action_items)
-        st.table(df_actions)
-    else:
-        st.info("No clear action items detected.")
-
-    # 5. Download Report
-    st.divider()
-    report_data = f"MEETING REPORT\n---\nSUMMARY:\n{summary}\n\nACTION ITEMS:\n"
-    for item in generator.action_items:
-        report_data += f"- {item['action']} (Assignee: {item['assignee']})\n"
+def extract_text_from_file(uploaded_file):
+    file_type = uploaded_file.name.split('.')[-1].lower()
     
-    st.download_button(
-        label="Download Full Report",
-        data=report_data,
-        file_name="meeting_report.txt",
-        mime="text/plain"
-    )
+    # 1. Handle standard Text
+    if file_type == 'txt':
+        return uploaded_file.getvalue().decode("utf-8")
+    
+    # 2. Handle Images (New!)
+    elif file_type in ['jpg', 'jpeg', 'png']:
+        image = Image.open(uploaded_file)
+        return pytesseract.image_to_string(image)
+    
+    # 3. Handle PDF (with OCR fallback)
+    elif file_type == 'pdf':
+        # First try standard extraction
+        pdf_reader = PyPDF2.PdfReader(uploaded_file)
+        text = ""
+        for page in pdf_reader.pages:
+            text += page.extract_text() or ""
+            
+        # If extraction failed (likely a scanned PDF), use OCR
+        if len(text.strip()) < 10:
+            # Note: This requires 'poppler' installed on your system
+            images = convert_from_path(uploaded_file)
+            for img in images:
+                text += pytesseract.image_to_string(img)
+        return text
 
-else:
-    st.info("Please upload a .txt file to begin analysis.")
+    # 4. Handle Word Docs
+    elif file_type == 'docx':
+        doc = Document(uploaded_file)
+        return "\n".join([para.text for para in doc.paragraphs])
+    
+    return None
