@@ -36,8 +36,9 @@ An automated intelligence tool that leverages **Natural Language Processing (NLP
 ## ⚡ Quick Start
 
 1. Clone the Repository
+git clone:
 ```bash
-git clone [https://github.com/T786-eng/AI-Meeting-Notes-Generator.git](https://github.com/T786-eng/AI-Meeting-Notes-Generator.git)
+(https://github.com/T786-eng/AI-Meeting-Notes-Generator.git)
 ```
 
 2. Install Dependencies
